@@ -2,9 +2,11 @@ const nome = document.getElementById('nome')
 const email = document.getElementById("email")
 const senha = document.getElementById("senha")
 const funcao = document.getElementById("funcao")
+const ddd = document.getElementById("DDD")
+const telefone = document.getElementById("telefone")
 
 nome.addEventListener('blur', function() {
-    validacaoEmail(nome)
+    validaNome(nome)
 })
 
 email.addEventListener('blur', function() {
@@ -16,11 +18,25 @@ senha.addEventListener('blur', function() {
 })
 
 funcao.addEventListener('blur', function() {
-    validacaoEmail(funcao)
+    validaFuncao(funcao)
+})
+
+ddd.addEventListener('blur', function() {
+    validaDDD(ddd)
+})
+
+telefone.addEventListener('blur', function() {
+    validaTelefone(telefone)
 })
 
 function validaNome(nome) {
-    return true 
+    if(nome.value.length > 3) {
+        nome.style.border = 'none'
+        return true
+    } else {
+        nome.style.border = 'solid red'
+        return false
+    }
 }
 
 function validacaoEmail(email) {
@@ -45,18 +61,54 @@ if ((usuario.length >=1) &&
 }
 
 function validacaoSenha(senha) {
-    return true
+    if(senha.value.length >+ 6) {
+        senha.style.border = 'none'
+        return true
+    } else {
+        senha.style.border = 'solid red'
+        return false
+    }
 }
 
-function validaFuncao(nome) {
-    return true
+function validaFuncao(funcao) {
+    if(funcao.value.length > 3) {
+        funcao.style.border = 'none'
+        return true
+    } else {
+        funcao.style.border = 'solid red'
+        return false
+    }
+}
+
+function validaDDD (ddd) {
+    if (ddd.value.length == 2) {
+        ddd.style.border = 'none'
+        return true
+    } else {
+        ddd.style.border = 'solid red'
+        return false
+    }
+}
+
+function validaTelefone (telefone) {
+    if (telefone.value.length == 9) {
+        telefone.style.border = 'none'
+        return true
+    } else {
+        telefone.style.border = 'solid red'
+        return false
+    }
 }
 
 function adicionar() {
-    if(validaNome(nome) && validacaoEmail(email) && validacaoSenha(senha) && validaFuncao(funcao)) {
+    if(validaNome(nome) && validacaoEmail(email) && validacaoSenha(senha) && validaFuncao(funcao) && validaDDD(ddd) && validaTelefone(telefone)) {
         
     } else {
+        validaNome(nome)
         validacaoEmail(email) 
         validaCPF(senha) 
+        validaFuncao(funcao)
+        validaDDD(ddd)
+        validaTelefone(telefone)
     }
 }

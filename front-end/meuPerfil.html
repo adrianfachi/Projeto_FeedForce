@@ -28,17 +28,14 @@
       </div>
 
       <form class="formulario">
-        <input type="text" placeholder="Nome Sobrenome Sobrenome" />
-        <input type="email" placeholder="nome.sobrenome@empresa.com" />
 
-        <div class="telefone-wrapper">
-          <input type="text" placeholder="+55 51 99988-7766" />
-          <img src="imagens/editar.png" class="icone-editar" alt="Editar telefone" />
-        </div>
-
-        <input type="text" placeholder="Empresa / Cargo" />
+        <div class="telefone">
+              <input type="text" name="DDD" id="DDD" placeholder="DDD" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="2">
+              <input type="text" name="telefone" id="telefone" placeholder="Telefone" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="9">
+          </div>
         <input type="text" placeholder="Endereço" />
       </form>
+      <input type="button" value="Confirmar mudanças" id="confirmar">
     </div>
   </main>
 

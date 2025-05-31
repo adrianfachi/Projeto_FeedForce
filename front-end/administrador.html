@@ -17,6 +17,10 @@
             <input type="text" name="email" id="email" placeholder="Email" >
             <input type="password" name="senha" id="senha" placeholder="Senha">
             <input type="text" name="função" id="funcao" placeholder="Função">
+            <div class="telefone">
+                <input type="text" name="DDD" id="DDD" placeholder="DDD" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="2">
+                <input type="text" name="telefone" id="telefone" placeholder="Telefone" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="9">
+            </div>
         </form>
         <input type="button" value="Adricionar" onclick="adicionar()" id="adicionar">
     </main>

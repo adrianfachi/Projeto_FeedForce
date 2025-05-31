@@ -9,6 +9,10 @@ body {
   padding: 20px;
   max-width: 400px;
   margin: 0 auto;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .caminho {
@@ -102,13 +106,24 @@ body {
   font-size: 14px;
 }
 
-.telefone-wrapper {
-  position: relative;
+#DDD {
+    width: 25vw;
 }
 
-.telefone-wrapper input {
-  width: 100%;
-  padding-right: 40px;
+#telefone {
+    width: 50vw;
+}
+
+.telefone {
+    display: flex;
+    gap: 5px;
+}
+.telefone > input {
+    border-radius: 10px;
+    border-style: none;
+    width: auto;
+    border: 1px solid #ddd;
+    background-color: #fff;
 }
 
 .icone-editar {
@@ -119,4 +134,16 @@ body {
   width: 20px;
   height: 20px;
   cursor: pointer;
+}
+
+#confirmar {
+    margin-top: 10vh;
+    padding: 15px;
+    width: 70vw;
+    border-style: none;
+    background-color: #30A280;
+    color: #fff;
+    font-size: 6vw;
+    border-radius: 10px;
+    cursor: pointer;
 }
