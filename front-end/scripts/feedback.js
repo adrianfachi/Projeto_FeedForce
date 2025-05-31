@@ -22,6 +22,37 @@ function adicionarMensagem(texto, classe = "bot") {
   chat.scrollTop = chat.scrollHeight;
 }
 
+function enviarFeedbackParaBackend() {
+  const feedbackData = {
+    nome: nome,  // Nome do destinatário
+    mensagem: mensagem,  // Texto da mensagem
+    anonimo: anonimo,  // Se é anônimo ou não
+    datetime: new Date().toISOString()  // Data e hora do envio
+  };
+
+  // Enviar para o backend na porta 5000
+  fetch("http://localhost:5000/processar-feedback", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(feedbackData)
+  })
+    .then(res => res.json())
+    .then(data => {
+      console.log("Feedback enviado com sucesso:", data);
+      adicionarMensagem(
+        anonimo
+          ? "Feedback anônimo enviado com sucesso!"
+          : `Feedback enviado para ${nome}!`
+      );
+    })
+    .catch(err => {
+      console.error("Erro ao enviar:", err);
+      adicionarMensagem("Ocorreu um erro ao tentar enviar o feedback.");
+    });
+}
+
 // Primeira mensagem do bot
 adicionarMensagem("Para quem você quer enviar?");
 
@@ -129,11 +160,7 @@ function mostrarBotoesEnviar() {
   botaoSim.textContent = "Sim";
   botaoSim.onclick = () => {
     adicionarMensagem("Sim", "usuario");
-    adicionarMensagem(
-      anonimo
-        ? "Feedback anônimo enviado com sucesso!"
-        : `Feedback enviado para ${nome}!`
-    );
+    enviarFeedbackParaBackend();  // Envia o feedback para o backend
     container.remove();
     input.disabled = false;
   };
@@ -153,3 +180,43 @@ function mostrarBotoesEnviar() {
   chat.appendChild(container);
   chat.scrollTop = chat.scrollHeight;
 }
+
+document.getElementById("inputMensagem").addEventListener("keypress", function (e) {
+  if (e.key === "Enter") {
+    const input = document.getElementById("inputMensagem");
+    const mensagem = input.value.trim();
+    
+    if (mensagem === "") return;
+
+    const match = mensagem.match(/^([^:]+):\s*(.+)$/); // Ex: João: produto x é bom
+    if (!match) {
+      alert("Por favor, use o formato Nome: mensagem");
+      return;
+    }
+
+    const nome = match[1].trim();
+    const texto = match[2].trim();
+
+    // Enviar para o backend
+    fetch("http://localhost:5000/processar-feedback", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        nome: nome,
+        texto: texto,
+        datetime: new Date().toISOString()
+      })
+    })
+
+
+    .then(res => res.json())
+    .then(data => {
+      console.log("Enviado com sucesso:", data);
+    })
+    .catch(err => console.error("Erro ao enviar:", err));
+
+    input.value = "";
+  }
+});

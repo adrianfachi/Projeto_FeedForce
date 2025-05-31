@@ -2,11 +2,16 @@ import json
 import re
 from transformers import pipeline
 from supabase import create_client, Client
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+from datetime import datetime
+
+app = Flask(__name__)
+CORS(app)  # Essencial para permitir o acesso do frontend
 
 # --- CONFIGURAÇÕES DA SUPABASE ---
-SUPABASE_URL = "https://dpmyuojkrmgnwfyieqig.supabase.co/"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-
+SUPABASE_URL = "https://dpmyuojkrmgnwfyieqig.supabase.co"
+SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRwbXl1b2prcm1nbndmeWllcWlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg2NjQ0NzgsImV4cCI6MjA2NDI0MDQ3OH0.NnNTpy36xLrBzHlLPmm8ACOzNXfZ3pAOtM8hdOa5Q3A"
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # --- Inicializar modelo de classificação ---
@@ -48,22 +53,51 @@ def process_feedback_item(item: dict) -> dict:
     entidade = detect_entity(clean_text)
 
     return {
-        "id_evaluator": numero,
-        "feedback": clean_text,
-        "score": nota,
-        "id_user": entidade
+        "id_evaluator": numero,  # Nome do usuário
+        "feedback": clean_text,   # Texto do feedback
+        "score": nota,           # Sentimento convertido em score
+        "id_user": entidade      # Entidade detectada no texto
     }
 
-def process_feedback_file(filepath: str) -> list:
-    """Processa um arquivo JSON de feedbacks."""
-    with open(filepath, 'r', encoding='utf-8') as f:
-        data = json.load(f)
-    
-    processed_data = [process_feedback_item(item) for item in data]
-    return processed_data
+@app.route("/processar-feedback", methods=["POST"])
+def processar_feedback():
+    # Obtém os dados do request
+    data = request.json
+    print("DADOS RECEBIDOS:", data)
 
-def send_to_supabase(data: list):
-    """Envia lista de feedbacks processados para Supabase."""
-    for item in data:
-        response = supabase.table('feedbacks').insert(item).execute()
-        print(f"Enviado: {item} | Resposta: {response}")
+    nome = data.get("nome")
+    texto = data.get("mensagem")  # Alterei para 'mensagem', conforme o nome enviado no JSON
+    datahora = data.get("datetime")
+
+    # Verificação se os campos estão presentes
+    if not nome or not texto or not datahora:
+        return jsonify({"status": "erro", "detalhes": "Dados incompletos: nome, mensagem ou datetime faltando"}), 400
+
+    # Criação do item a ser processado
+    item = {
+        "numero": nome,
+        "datetime": datahora,
+        "text": texto
+    }
+
+    try:
+        # Processa o feedback com as funções definidas
+        processado = process_feedback_item(item)
+        
+        # Envia os dados processados para o Supabase
+        response = supabase.table("feedbacks").insert(processado).execute()
+        
+        # Verificando a resposta do Supabase
+        if response.data:
+            return jsonify({"status": "ok", "feedback": processado}), 200
+        else:
+            print(f"Erro na inserção: {response.error}")  # Log do erro
+            return jsonify({"status": "erro", "detalhes": response.error}), 500
+
+    except Exception as e:
+        # Captura e exibe o erro de execução
+        print(f"Erro ao processar feedback: {str(e)}")
+        return jsonify({"status": "erro", "detalhes": str(e)}), 500
+
+if __name__ == "__main__":
+    app.run(port=5000)

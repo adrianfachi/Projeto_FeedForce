@@ -37,3 +37,4 @@ class SupabaseConnection {
 }
 
 module.exports = SupabaseConnection;
+
