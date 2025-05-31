@@ -1,6 +1,7 @@
 const chat = document.getElementById("chat");
 const input = document.getElementById("inputMensagem");
 const listaSugestoes = document.getElementById("sugestoes");
+const btnAnonimo = document.getElementById("btnAnonimo");
 
 const SUPABASE_URL = "https://dpmyuojkrmgnwfyieqig.supabase.co"
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRwbXl1b2prcm1nbndmeWllcWlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg2NjQ0NzgsImV4cCI6MjA2NDI0MDQ3OH0.NnNTpy36xLrBzHlLPmm8ACOzNXfZ3pAOtM8hdOa5Q3A"
@@ -11,12 +12,13 @@ let nome = '';
 let mensagem = '';
 let anonimo = false;
 
-const nomesUsuarios = [
-  "Ana Souza", "Ana Lima", "Ana Mendes", "Ana Rocha",
-  "Andy Silva", "Fernanda Costa", "Gabriel Monteiro",
-  "Helena Duarte", "Igor Santos", "Joana Barros"
-];
+// Alternar anonimato
+btnAnonimo.addEventListener("click", () => {
+  anonimo = !anonimo;
+  btnAnonimo.textContent = anonimo ? "Anonimato: Ligado" : "Anonimato: Desligado";
+});
 
+// Adiciona mensagem ao chat
 function adicionarMensagem(texto, classe = "bot") {
   const div = document.createElement("div");
   div.classList.add("mensagem", classe);
@@ -25,36 +27,10 @@ function adicionarMensagem(texto, classe = "bot") {
   chat.scrollTop = chat.scrollHeight;
 }
 
+// Primeira mensagem
 adicionarMensagem("Para quem você quer enviar?");
 
-input.addEventListener("input", () => {
-  const valor = input.value.toLowerCase().trim();
-  listaSugestoes.innerHTML = "";
-
-  if (etapa !== 0 || valor === "") return;
-
-  const correspondentes = nomesUsuarios
-    .filter(nome => nome.toLowerCase().includes(valor))
-    .slice(0, 5);
-
-  correspondentes.forEach(nome => {
-    const li = document.createElement("li");
-    li.textContent = nome;
-    li.addEventListener("click", () => {
-      input.value = nome;
-      listaSugestoes.innerHTML = "";
-      input.focus();
-    });
-    listaSugestoes.appendChild(li);
-  });
-});
-
-document.addEventListener("click", (e) => {
-  if (!input.contains(e.target) && !listaSugestoes.contains(e.target)) {
-    listaSugestoes.innerHTML = "";
-  }
-});
-
+// Digitação
 input.addEventListener("keydown", function (e) {
   if (e.key === "Enter" && input.value.trim() !== "") {
     const textoUsuario = input.value.trim();
@@ -66,58 +42,18 @@ input.addEventListener("keydown", function (e) {
       nome = textoUsuario;
       setTimeout(() => adicionarMensagem("O que você quer dizer?"), 500);
       etapa = 1;
-
     } else if (etapa === 1) {
       mensagem = textoUsuario;
       setTimeout(() => {
-        adicionarMensagem("Você quer enviar esse feedback de forma anônima?");
-        mostrarBotoesAnonimo();
+        adicionarMensagem("Deseja enviar?");
+        mostrarBotoesEnviar();
       }, 500);
       etapa = 2;
     }
   }
 });
 
-function mostrarBotoesAnonimo() {
-  input.disabled = true;
-
-  const container = document.createElement("div");
-  container.classList.add("botoes");
-
-  const botaoSim = document.createElement("button");
-  botaoSim.classList.add("botao");
-  botaoSim.textContent = "Sim";
-  botaoSim.onclick = () => {
-    adicionarMensagem("Sim", "usuario");
-    anonimo = true;
-    container.remove();
-    input.disabled = false;
-    setTimeout(() => {
-      adicionarMensagem("Deseja enviar?");
-      mostrarBotoesEnviar();
-    }, 500);
-  };
-
-  const botaoNao = document.createElement("button");
-  botaoNao.classList.add("botao");
-  botaoNao.textContent = "Não";
-  botaoNao.onclick = () => {
-    adicionarMensagem("Não", "usuario");
-    anonimo = false;
-    container.remove();
-    input.disabled = false;
-    setTimeout(() => {
-      adicionarMensagem("Deseja enviar?");
-      mostrarBotoesEnviar();
-    }, 500);
-  };
-
-  container.appendChild(botaoSim);
-  container.appendChild(botaoNao);
-  chat.appendChild(container);
-  chat.scrollTop = chat.scrollHeight;
-}
-
+// Mostrar botões
 function mostrarBotoesEnviar() {
   input.disabled = true;
 
