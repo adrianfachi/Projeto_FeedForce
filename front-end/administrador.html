@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="css/administrador.css">
+</head>
+<body>
+    <header>
+        <img src="imagens/FeedForce_logo.png" alt="Logo">
+    </header>
+    <main>
+        <h1 id="titulo">Adicione um colaborador:</h1>
+        <form>
+            <input type="text" name="nome" id="nome" placeholder="Nome completo">
+            <input type="text" name="email" id="email" placeholder="Email" >
+            <input type="password" name="senha" id="senha" placeholder="Senha">
+            <input type="text" name="função" id="funcao" placeholder="Função">
+        </form>
+        <input type="button" value="Adricionar" onclick="adicionar()" id="adicionar">
+    </main>
+    <script src="scripts/administrador.js"></script>
+</body>
+
+</html>
