@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recompensas</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/recompensas.css" />
+</head>
+<body>
+  <main class="recompensas-container">
+    <p class="caminho"><a href="minhaConta.html">Minha Conta</a> > <strong>Recompensas</strong></p>
+
+    <p class="pontos">Pontos Acumulados: <span id="pontos">125</span></p>
+
+    <ul class="lista-recompensas">
+      <li data-pontos="400">
+        <img src="imagens/headset.png" alt="Headset" />
+        <div class="info">
+          <p class="titulo">Headset Bluetooth HP</p>
+          <p class="valor">400 pontos</p>
+        </div>
+        <input type="checkbox" class="item-checkbox" />
+      </li>
+      <li data-pontos="100">
+        <img src="imagens/caderno.png" alt="Caderno" />
+        <div class="info">
+          <p class="titulo">Caderno HP</p>
+          <p class="valor">100 pontos</p>
+        </div>
+        <input type="checkbox" class="item-checkbox" />
+      </li>
+      <li data-pontos="280">
+        <img src="imagens/mouse.png" alt="Mouse" />
+        <div class="info">
+          <p class="titulo">Mouse com Fio HP</p>
+          <p class="valor">280 pontos</p>
+        </div>
+        <input type="checkbox" class="item-checkbox" />
+      </li>
+      <li data-pontos="350">
+        <img src="imagens/mochila.png" alt="Mochila" />
+        <div class="info">
+          <p class="titulo">Mochila HP</p>
+          <p class="valor">350 pontos</p>
+        </div>
+        <input type="checkbox" class="item-checkbox" />
+      </li>
+    </ul>
+
+    <button class="botao-resgatar" id="btnResgatar">Resgatar Prêmios</button>
+  </main>
+
+  <footer>
+    <div>
+      <a href="meusFeedbacks.html">
+        <img class="emotes" src="imagens/meusFeedbacks.png" alt="meus feedbacks" />
+      </a>
+    </div>
+    <div>
+      <a href="telaInicial.html">
+        <img class="emotes" src="imagens/addFeedback.png" alt="adicionar feedback" />
+      </a>
+    </div>
+    <div>
+      <a href="minhaConta.html">
+        <img class="emotes" src="imagens/meuPerfil.png" alt="meu perfil" />
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    const pontosDisponiveis = 125;
+    const checkboxes = document.querySelectorAll(".item-checkbox");
+    const btnResgatar = document.getElementById("btnResgatar");
+
+    checkboxes.forEach(checkbox => {
+      checkbox.addEventListener("change", () => {
+        const totalSelecionado = calcularTotalSelecionado();
+
+        if (totalSelecionado > pontosDisponiveis) {
+          alert("Você não tem pontos suficientes para esse item.");
+          checkbox.checked = false;
+        }
+      });
+    });
+
+    function calcularTotalSelecionado() {
+      let total = 0;
+      checkboxes.forEach(cb => {
+        if (cb.checked) {
+          const pontosItem = parseInt(cb.closest("li").getAttribute("data-pontos"));
+          total += pontosItem;
+        }
+      });
+      return total;
+    }
+
+    btnResgatar.addEventListener("click", () => {
+      const total = calcularTotalSelecionado();
+
+      if (total === 0) {
+        alert("Selecione pelo menos um item para resgatar.");
+      } else if (total <= pontosDisponiveis) {
+        alert("Prêmios resgatados com sucesso! 🎉");
+      } else {
+        alert("Você não pode resgatar mais pontos do que possui.");
+      }
+    });
+  </script>
+</body>
+</html>
