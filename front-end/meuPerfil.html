@@ -15,8 +15,16 @@
       </p>
 
       <div class="foto-perfil">
-        <div class="imagem"></div>
-        <div class="botao-editar-foto" title="Editar foto">+</div>
+        <div class="imagem" id="imagemPerfil"></div>
+        <div class="botao-editar-foto" id="menuToggle">+</div>
+
+        <div class="menu-opcoes" id="menuOpcoes">
+          <button id="verImagem">Ver imagem</button>
+          <button id="editarImagem">Editar imagem</button>
+          <button id="removerImagem">Remover imagem</button>
+        </div>
+
+        <input type="file" id="inputImagem" accept="image/*" style="display: none;" />
       </div>
 
       <form class="formulario">
@@ -51,5 +59,7 @@
       </a>
     </div>
   </footer>
+
+  <script src="scripts/meuPerfil.js"></script>
 </body>
 </html>

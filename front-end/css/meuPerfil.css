@@ -1,28 +1,25 @@
 body {
   background-color: #f4f4f4;
   font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
 .perfil-container {
   padding: 20px;
   max-width: 400px;
-  width: 100%;
   margin: 0 auto;
 }
 
 .caminho {
   font-size: 14px;
-  margin-bottom: 20px;
   color: #333;
+  margin-bottom: 20px;
 }
 
 .caminho a {
   text-decoration: none;
-  color: #888;
-}
-
-.caminho strong {
-  color: #000;
+  color: #555;
 }
 
 .foto-perfil {
@@ -30,15 +27,18 @@ body {
   justify-content: center;
   position: relative;
   margin-bottom: 30px;
+  flex-direction: column;
+  align-items: center;
 }
 
-.foto-perfil .imagem {
+.imagem {
   width: 100px;
   height: 100px;
   background-color: #ccc;
   border-radius: 50%;
-  border: 2px solid #fff;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background-size: cover;
+  background-position: center;
+  border: 2px solid #aaa;
 }
 
 .botao-editar-foto {
@@ -56,6 +56,36 @@ body {
   font-weight: bold;
   font-size: 16px;
   cursor: pointer;
+}
+
+.menu-opcoes {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, 10px);
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  z-index: 10;
+  min-width: 140px;
+}
+
+.menu-opcoes button {
+  background: none;
+  border: none;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.menu-opcoes button:hover {
+  background-color: #f1f1f1;
 }
 
 .formulario {
