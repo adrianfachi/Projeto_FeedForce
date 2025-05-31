@@ -1,0 +1,82 @@
+.recompensas-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.caminho {
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.caminho a {
+  text-decoration: none;
+  color: #888;
+}
+
+.caminho strong {
+  color: #000;
+}
+
+.pontos {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.lista-recompensas {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.lista-recompensas li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.lista-recompensas img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  border-radius: 6px;
+  background-color: #f0f0f0;
+}
+
+.lista-recompensas .info {
+  flex: 1;
+}
+
+.lista-recompensas .titulo {
+  font-weight: bold;
+  margin: 0;
+}
+
+.lista-recompensas .valor {
+  font-size: 14px;
+  color: #555;
+  margin-top: 2px;
+}
+
+.botao-resgatar {
+  width: 100%;
+  padding: 12px;
+  background-color: #2bb673;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+.botao-resgatar:hover {
+  background-color: #239f64;
+}
