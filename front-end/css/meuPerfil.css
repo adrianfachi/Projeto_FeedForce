@@ -1,0 +1,92 @@
+body {
+  background-color: #f4f4f4;
+  font-family: Arial, sans-serif;
+}
+
+.perfil-container {
+  padding: 20px;
+  max-width: 400px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.caminho {
+  font-size: 14px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.caminho a {
+  text-decoration: none;
+  color: #888;
+}
+
+.caminho strong {
+  color: #000;
+}
+
+.foto-perfil {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.foto-perfil .imagem {
+  width: 100px;
+  height: 100px;
+  background-color: #ccc;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.botao-editar-foto {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  background-color: white;
+  border: 1px solid #999;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 24px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.formulario input {
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  font-size: 14px;
+}
+
+.telefone-wrapper {
+  position: relative;
+}
+
+.telefone-wrapper input {
+  width: 100%;
+  padding-right: 40px;
+}
+
+.icone-editar {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}

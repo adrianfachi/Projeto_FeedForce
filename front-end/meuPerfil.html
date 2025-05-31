@@ -1,27 +1,54 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Force App</title>
-  <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meu Perfil</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/meuPerfil.css" />
 </head>
 <body>
-  <header>
-
-  </header>
   <main>
-    
+    <div class="perfil-container">
+      <p class="caminho">
+        <a href="minhaConta.html">Minha Conta</a> > <strong>Meu Perfil</strong>
+      </p>
+
+      <div class="foto-perfil">
+        <div class="imagem"></div>
+        <div class="botao-editar-foto" title="Editar foto">+</div>
+      </div>
+
+      <form class="formulario">
+        <input type="text" placeholder="Nome Sobrenome Sobrenome" />
+        <input type="email" placeholder="nome.sobrenome@empresa.com" />
+
+        <div class="telefone-wrapper">
+          <input type="text" placeholder="+55 51 99988-7766" />
+          <img src="imagens/editar.png" class="icone-editar" alt="Editar telefone" />
+        </div>
+
+        <input type="text" placeholder="Empresa / Cargo" />
+        <input type="text" placeholder="Endereço" />
+      </form>
+    </div>
   </main>
+
   <footer>
     <div>
-      <a href="meusFeedbacks.html" ><img class="emotes" src="imagens/meusFeedbacks.png" alt="meus feedbacks"></a>
+      <a href="meusFeedbacks.html">
+        <img class="emotes" src="imagens/meusFeedbacks.png" alt="meus feedbacks" />
+      </a>
     </div>
     <div>
-      <a href="telaInicial.html" ><img class="emotes" id="addFeedback" src="imagens/addFeedback.png" alt="adicionar feedback"></a>
+      <a href="telaInicial.html">
+        <img class="emotes" id="addFeedback" src="imagens/addFeedback.png" alt="adicionar feedback" />
+      </a>
     </div>
     <div>
-      <a href="meuPerfil.html" ><img class="emotes" src="imagens/meuPerfil.png" alt="meu perfil"></a>
+      <a href="minhaConta.html">
+        <img class="emotes" src="imagens/meuPerfil.png" alt="meu perfil" />
+      </a>
     </div>
   </footer>
 </body>

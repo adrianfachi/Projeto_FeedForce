@@ -1,0 +1,101 @@
+body {
+  background-color: #f4f4f4;
+  font-family: Arial, sans-serif;
+}
+
+.container-conta {
+  margin-top: 20px;
+  text-align: center;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+h2 {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: left;
+  padding: 12px 12px 0 12px;
+  margin: 20px 20px 0 20px;
+  width: 90%;
+}
+
+.perfil-box {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 12px;
+  margin: 20px auto;
+  width: 90%;
+  justify-content: space-between;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.perfil-img {
+  width: 40px;
+  height: 40px;
+  background-color: #ccc;
+  border-radius: 50%;
+}
+
+.perfil-link {
+  flex: 1;
+  margin-left: 10px;
+  text-align: left;
+  text-decoration: none;
+  color: black;
+  font-weight: 500;
+}
+
+.pontos {
+  margin: 20px 0;
+}
+
+.valor {
+  font-size: 40px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.pontos {
+  font-size: 20px;
+}
+
+.botao-conta {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 14px;
+  margin: 10px auto;
+  width: 90%;
+  color: black;
+  font-weight: 500;
+  text-decoration: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  justify-content: space-between;
+}
+
+.botao-conta .icon-group {
+  display: flex;
+  align-items: center;
+}
+
+.botao-conta .icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+}
+
+.botao-conta .seta {
+  font-size: 18px;
+  color: #888;
+}
+
+.sair {
+  margin-top: 120px;	
+}
