@@ -13,7 +13,8 @@ def create_user(user_name, user_email, user_password, user_role, user_cellphone)
         "user_password": user_password,
         "user_email": user_email,
         "user_role": user_role,
-        "user_cellphone": user_cellphone
+        "user_cellphone": user_cellphone,
+        "user_total_score": 0
     }
     try:
         response = supabase.table("users").insert(data).execute()
