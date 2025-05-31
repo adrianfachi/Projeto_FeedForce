@@ -3,6 +3,7 @@ const btnAdicionarPergunta = document.getElementById("adicionarPergunta");
 const btnGerarSurvey = document.getElementById("gerarSurvey");
 const linkSurvey = document.getElementById("linkSurvey");
 const surveyLink = document.getElementById("surveyLink");
+const btnCopiar = document.getElementById("copiarLink");
 
 let numeroPergunta = 0;
 
@@ -42,41 +43,41 @@ btnAdicionarPergunta.addEventListener("click", () => {
   tipoSelect.addEventListener("change", () => {
     if (tipoSelect.value === "fechada") {
       alternativasContainer.style.display = "block";
+      alternativasBox.innerHTML = "";
+      for (let i = 0; i < 2; i++) {
+        btnAdicionarAlt.click(); // adiciona duas alternativas iniciais
+      }
     } else {
       alternativasContainer.style.display = "none";
       alternativasBox.innerHTML = "";
     }
   });
 
-    btnAdicionarAlt.addEventListener("click", () => {
-  const container = document.createElement("div");
-  container.classList.add("linha-alternativa");
+  btnAdicionarAlt.addEventListener("click", () => {
+    const container = document.createElement("div");
+    container.classList.add("linha-alternativa");
 
-  const input = document.createElement("input");
-  input.setAttribute("type", "text");
-  input.setAttribute("placeholder", "Alternativa");
+    const input = document.createElement("input");
+    input.setAttribute("type", "text");
+    input.setAttribute("placeholder", "Alternativa");
 
-  const botao = document.createElement("button");
-  botao.innerHTML = "🗑️";
-  botao.type = "button";
-  botao.classList.add("btn-remover");
+    const botao = document.createElement("button");
+    botao.innerHTML = "🗑️";
+    botao.type = "button";
+    botao.classList.add("btn-remover");
 
-  botao.addEventListener("click", () => {
-    container.remove();
+    botao.addEventListener("click", () => {
+      container.remove();
+    });
+
+    container.appendChild(input);
+    container.appendChild(botao);
+    alternativasBox.appendChild(container);
   });
-
-  container.appendChild(input);
-  container.appendChild(botao);
-  alternativasBox.appendChild(container);
 });
 
-
-});
-
-// Gerar survey
 btnGerarSurvey.addEventListener("click", () => {
   const perguntas = [];
-
   const caixas = document.querySelectorAll(".pergunta-box");
 
   for (let caixa of caixas) {
@@ -107,8 +108,20 @@ btnGerarSurvey.addEventListener("click", () => {
     perguntas.push(pergunta);
   }
 
+  // Salvar no localStorage
   localStorage.setItem("surveyCriada", JSON.stringify(perguntas));
-  surveyLink.textContent = "Clique aqui para compartilhar";
-  surveyLink.href = "responderSurvey.html";
+
+  // Gerar link simulado
+  const link = "https://meusurveys.com/s/mRYWn1Fl";
+  surveyLink.textContent = link;
+  surveyLink.href = link;
   linkSurvey.style.display = "block";
+});
+
+// Botão de copiar link
+btnCopiar.addEventListener("click", () => {
+  const texto = surveyLink.textContent;
+  navigator.clipboard.writeText(texto).then(() => {
+    alert("Link copiado para a área de transferência!");
+  });
 });
