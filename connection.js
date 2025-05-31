@@ -28,6 +28,23 @@ class SupabaseConnection {
     if (error) throw error;
     return data;
   }
+  async updateFeedbacks(tableName, match, feedback1, feedback2, feedback3, feedback4, feedback5) {
+    const feedbackData = {
+      feedback1: feedback1 ?? null,
+      feedback2: feedback2 ?? null,
+      feedback3: feedback3 ?? null,
+      feedback4: feedback4 ?? null,
+      feedback5: feedback5 ?? null
+    };
+
+    const { data, error } = await this.supabase
+      .from(tableName)
+      .update(feedbackData)
+      .match(match);
+
+    if (error) throw error;
+    return data;
+  }
 
   async delete(tableName, match) {
     const { data, error } = await this.supabase.from(tableName).delete().match(match);
