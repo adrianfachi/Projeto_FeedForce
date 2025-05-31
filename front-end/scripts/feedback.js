@@ -1,10 +1,18 @@
 const chat = document.getElementById("chat");
 const input = document.getElementById("inputMensagem");
+const listaSugestoes = document.getElementById("sugestoes");
 
 let etapa = 0;
 let nome = '';
 let mensagem = '';
 let anonimo = false;
+
+// Lista de nomes simulada
+const nomesUsuarios = [
+  "Ana Souza", "Ana Lima", "Ana Mendes", "Ana Rocha",
+  "Andy Silva", "Fernanda Costa", "Gabriel Monteiro",
+  "Helena Duarte", "Igor Santos", "Joana Barros"
+];
 
 function adicionarMensagem(texto, classe = "bot") {
   const div = document.createElement("div");
@@ -17,11 +25,42 @@ function adicionarMensagem(texto, classe = "bot") {
 // Primeira mensagem do bot
 adicionarMensagem("Para quem você quer enviar?");
 
+// Autocompletar ao digitar
+input.addEventListener("input", () => {
+  const valor = input.value.toLowerCase().trim();
+  listaSugestoes.innerHTML = "";
+
+  if (etapa !== 0 || valor === "") return;
+
+  const correspondentes = nomesUsuarios
+    .filter(nome => nome.toLowerCase().includes(valor))
+    .slice(0, 5);
+
+  correspondentes.forEach(nome => {
+    const li = document.createElement("li");
+    li.textContent = nome;
+    li.addEventListener("click", () => {
+      input.value = nome;
+      listaSugestoes.innerHTML = "";
+      input.focus();
+    });
+    listaSugestoes.appendChild(li);
+  });
+});
+
+document.addEventListener("click", (e) => {
+  if (!input.contains(e.target) && !listaSugestoes.contains(e.target)) {
+    listaSugestoes.innerHTML = "";
+  }
+});
+
+// Controle do chat
 input.addEventListener("keydown", function (e) {
   if (e.key === "Enter" && input.value.trim() !== "") {
     const textoUsuario = input.value.trim();
     adicionarMensagem(textoUsuario, "usuario");
     input.value = "";
+    listaSugestoes.innerHTML = "";
 
     if (etapa === 0) {
       nome = textoUsuario;
@@ -58,7 +97,8 @@ function mostrarBotoesAnonimo() {
       mostrarBotoesEnviar();
     }, 500);
   };
-const botaoNao = document.createElement("button");
+
+  const botaoNao = document.createElement("button");
   botaoNao.classList.add("botao");
   botaoNao.textContent = "Não";
   botaoNao.onclick = () => {
@@ -92,7 +132,7 @@ function mostrarBotoesEnviar() {
     adicionarMensagem(
       anonimo
         ? "Feedback anônimo enviado com sucesso!"
-        : "Feedback enviado para ${nome}!"
+        : `Feedback enviado para ${nome}!`
     );
     container.remove();
     input.disabled = false;
