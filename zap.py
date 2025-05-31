@@ -4,13 +4,13 @@ from datetime import datetime
 LOG_FILE = "messages.json"
 
 def save_message(message):
-    # Create a single-entry list with the new message
+    
     data = [{
         "timestamp": datetime.utcnow().isoformat(),
         "message": message
     }]
 
-    # Overwrite the JSON file with the new data
+
     with open(LOG_FILE, "w") as f:
         json.dump(data, f, indent=4)
 
