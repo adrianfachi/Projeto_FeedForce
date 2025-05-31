@@ -1,196 +1,143 @@
-const chat = document.getElementById("chat");
-const input = document.getElementById("inputMensagem");
-const listaSugestoes = document.getElementById("sugestoes");
-const btnAnonimo = document.getElementById("btnAnonimo");
+window.addEventListener("DOMContentLoaded", () => {
+  const chat = document.getElementById("chat");
+  const input = document.getElementById("inputMensagem");
+  const listaSugestoes = document.getElementById("sugestoes");
+  const btnAnonimo = document.getElementById("btnAnonimo");
 
-const SUPABASE_URL = "https://dpmyuojkrmgnwfyieqig.supabase.co"
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRwbXl1b2prcm1nbndmeWllcWlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg2NjQ0NzgsImV4cCI6MjA2NDI0MDQ3OH0.NnNTpy36xLrBzHlLPmm8ACOzNXfZ3pAOtM8hdOa5Q3A"
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  let etapa = 0;
+  let nome = '';
+  let mensagem = '';
+  let anonimo = false;
 
-let etapa = 0;
-let nome = '';
-let mensagem = '';
-let anonimo = false;
+  // Alternar anonimato
+  btnAnonimo.addEventListener("click", () => {
+    anonimo = !anonimo;
+    btnAnonimo.textContent = anonimo ? "Anonimato: Ligado" : "Anonimato: Desligado";
+  });
 
-// Alternar anonimato
-btnAnonimo.addEventListener("click", () => {
-  anonimo = !anonimo;
-  btnAnonimo.textContent = anonimo ? "Anonimato: Ligado" : "Anonimato: Desligado";
-});
-
-// Adiciona mensagem ao chat
-function adicionarMensagem(texto, classe = "bot") {
-  const div = document.createElement("div");
-  div.classList.add("mensagem", classe);
-  div.textContent = texto;
-  chat.appendChild(div);
-  chat.scrollTop = chat.scrollHeight;
-}
-
-// Primeira mensagem
-adicionarMensagem("Para quem você quer enviar?");
-
-// Digitação
-input.addEventListener("keydown", function (e) {
-  if (e.key === "Enter" && input.value.trim() !== "") {
-    const textoUsuario = input.value.trim();
-    adicionarMensagem(textoUsuario, "usuario");
-    input.value = "";
-    listaSugestoes.innerHTML = "";
-
-    if (etapa === 0) {
-      nome = textoUsuario;
-      setTimeout(() => adicionarMensagem("O que você quer dizer?"), 500);
-      etapa = 1;
-    } else if (etapa === 1) {
-      mensagem = textoUsuario;
-      setTimeout(() => {
-        adicionarMensagem("Deseja enviar?");
-        mostrarBotoesEnviar();
-      }, 500);
-      etapa = 2;
-    }
+  // Adiciona mensagem ao chat
+  function adicionarMensagem(texto, classe = "bot") {
+    const div = document.createElement("div");
+    div.classList.add("mensagem", classe);
+    div.textContent = texto;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
   }
-});
 
-// Mostrar botões
-function mostrarBotoesEnviar() {
-  input.disabled = true;
+  // Primeira mensagem
+  adicionarMensagem("Para quem você quer enviar?");
 
-  const container = document.createElement("div");
-  container.classList.add("botoes");
-
-  const botaoSim = document.createElement("button");
-  botaoSim.classList.add("botao");
-  botaoSim.textContent = "Sim";
-
-  botaoSim.onclick = async () => {
-    adicionarMensagem("Sim", "usuario");
-
-    const idUsuario = await buscarIdUsuarioPorNome(nome);
-
-    if (!idUsuario) {
-      adicionarMensagem("Erro: usuário não encontrado.");
-      container.remove();
-      input.disabled = false;
-      return;
-    }
-
-    const feedbackData = {
-      feedback: mensagem,
-      template: "padrão",
-      score: 1,
-      id_users: idUsuario,
-      id_evaluator: anonimo ? null : "evaluator_id", // ajuste conforme seu app
-    };
-
-    // Aqui você chama a função inteligente que distribui entre as tabelas
-    await enviarFeedbackInteligente(feedbackData);
-
-    container.remove();
-    input.disabled = false;
-  };
-
-  const botaoNao = document.createElement("button");
-  botaoNao.classList.add("botao");
-  botaoNao.textContent = "Não";
-  botaoNao.onclick = () => {
-    adicionarMensagem("Não", "usuario");
-    adicionarMensagem("Ok, o feedback não foi enviado.");
-    container.remove();
-    input.disabled = false;
-  };
-
-  container.appendChild(botaoSim);
-  container.appendChild(botaoNao);
-  chat.appendChild(container);
-  chat.scrollTop = chat.scrollHeight;
-}
-
-
+  // Buscar id_user pelo user_name
+  const BACKEND_URL = "http://127.0.0.1:5000"; // porta do Flask
 
 async function buscarIdUsuarioPorNome(nome) {
-  const { data, error } = await supabase
-    .from("users")
-    .select("id")
-    .ilike("user_name", nome)
-    .limit(1)
-    .single();
-
-  if (error || !data) {
+  try {
+    const response = await fetch(`${BACKEND_URL}/api/buscar_usuario?nome=${encodeURIComponent(nome)}`);
+    const result = await response.json();
+    if (response.ok && result.id) {
+      return result.id;
+    } else {
+      console.error("Erro na resposta:", result);
+      return null;
+    }
+  } catch (error) {
     console.error("Erro ao buscar usuário:", error);
     return null;
   }
-
-  return data.id;
 }
 
-async function enviarFeedbackInteligente(feedbackData) {
-  const tabelas = ["feedback1", "feedback2", "feedback3", "feedback4", "feedback5"];
-  
-  for (let i = 0; i < tabelas.length; i++) {
-    const tabela = tabelas[i];
 
-    // Verifica se a tabela está vazia
-    const { data: registros, error: erroBusca } = await supabase
-      .from(tabela)
-      .select("*")
-      .limit(1);
 
-    if (erroBusca) {
-      console.error(`Erro ao verificar a tabela ${tabela}:`, erroBusca.message);
-      continue;
-    }
+  // Enviar feedback para backend Python
+  async function enviarFeedback(feedbackData) {
+    try {
+      const response = await fetch('/api/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(feedbackData),
+      });
 
-    // Se tabela estiver vazia, insere o feedback nela
-    if (registros.length === 0) {
-      const { error: erroInsert } = await supabase
-        .from(tabela)
-        .insert([feedbackData]);
+      const result = await response.json();
 
-      if (erroInsert) {
-        adicionarMensagem("Erro ao enviar feedback: " + erroInsert.message);
+      if (!response.ok) {
+        adicionarMensagem("Erro ao enviar feedback: " + (result.error || "Erro desconhecido"));
       } else {
-        adicionarMensagem(`Feedback enviado para a tabela ${tabela}!`);
+        adicionarMensagem("Feedback enviado com sucesso!");
       }
-      return;
+    } catch (error) {
+      adicionarMensagem("Erro ao enviar feedback: " + error.message);
     }
   }
 
-  // Se todas estiverem preenchidas, substitui o da feedback5 (deleta e insere)
-  const { data: registro5, error: erro5 } = await supabase
-    .from("feedback5")
-    .select("id") // ou o nome da chave primária correta
-    .limit(1);
+  // Digitação
+  input.addEventListener("keydown", async function (e) {
+    if (e.key === "Enter" && input.value.trim() !== "") {
+      const textoUsuario = input.value.trim();
+      adicionarMensagem(textoUsuario, "usuario");
+      input.value = "";
+      listaSugestoes.innerHTML = "";
 
-  if (erro5 || !registro5 || registro5.length === 0) {
-    adicionarMensagem("Erro ao acessar feedback5 para sobrescrever.");
+      if (etapa === 0) {
+        nome = textoUsuario;
+        setTimeout(() => adicionarMensagem("O que você quer dizer?"), 500);
+        etapa = 1;
+      } else if (etapa === 1) {
+        mensagem = textoUsuario;
+        setTimeout(() => {
+          adicionarMensagem("Deseja enviar?");
+          mostrarBotoesEnviar();
+        }, 500);
+        etapa = 2;
+      }
+    }
+  });
+
+  // Mostrar botões para confirmar envio
+  function mostrarBotoesEnviar() {
+    input.disabled = true;
+
+    const container = document.createElement("div");
+    container.classList.add("botoes");
+
+    const botaoSim = document.createElement("button");
+    botaoSim.classList.add("botao");
+    botaoSim.textContent = "Sim";
+
+    botaoSim.onclick = async () => {
+  const id_user = await buscarIdUsuarioPorNome(nome);
+
+  if (!id_user) {
+    adicionarMensagem("Usuário não encontrado para enviar feedback.");
+    input.disabled = false;
+    container.remove();
     return;
   }
 
-  const idRegistro = registro5[0].id;
+  const feedbackData = {
+    id_user,
+    feedback: mensagem,
+    score: 1,
+    id_evaluator: anonimo ? null : "id_avaliador_aqui",
+  };
 
-  const { error: erroDelete } = await supabase
-    .from("feedback5")
-    .delete()
-    .eq("id", idRegistro);
+  await enviarFeedback(feedbackData);
+  input.disabled = false;
+  container.remove();
+};
 
-  if (erroDelete) {
-    adicionarMensagem("Erro ao apagar registro da feedback5: " + erroDelete.message);
-    return;
+    const botaoNao = document.createElement("button");
+    botaoNao.classList.add("botao");
+    botaoNao.textContent = "Não";
+    botaoNao.onclick = () => {
+      adicionarMensagem("Não", "usuario");
+      adicionarMensagem("Ok, o feedback não foi enviado.");
+      container.remove();
+      input.disabled = false;
+    };
+
+    container.appendChild(botaoSim);
+    container.appendChild(botaoNao);
+    chat.appendChild(container);
+    chat.scrollTop = chat.scrollHeight;
   }
-
-  const { error: erroInsertFinal } = await supabase
-    .from("feedback5")
-    .insert([feedbackData]);
-
-  if (erroInsertFinal) {
-    adicionarMensagem("Erro ao inserir novo feedback na feedback5: " + erroInsertFinal.message);
-  } else {
-    adicionarMensagem("Feedback sobrescreveu o mais antigo em feedback5!");
-  }
-}
-
-
-
-
+});
