@@ -64,7 +64,8 @@ function mostrarBotoesEnviar() {
     adicionarMensagem(
       anonimo
         ? "Feedback anônimo enviado com sucesso!"
-        : Feedback enviado para ${nome}!
+        : `Feedback enviado para ${nome}!`
+
     );
     container.remove();
     input.disabled = false;
