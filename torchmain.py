@@ -1,65 +1,69 @@
-import torch
-import torch.nn as nn
-import torch.optim as optim
-import spacy
+import json
+import re
+from transformers import pipeline
+from supabase import create_client, Client
 
-# Load SpaCy English model
-nlp = spacy.load("en_core_web_sm")
+# --- CONFIGURAÇÕES DA SUPABASE ---
+SUPABASE_URL = "https://dpmyuojkrmgnwfyieqig.supabase.co/"
+SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRwbXl1b2prcm1nbndmeWllcWlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg2NjQ0NzgsImV4cCI6MjA2NDI0MDQ3OH0.NnNTpy36xLrBzHlLPmm8ACOzNXfZ3pAOtM8hdOa5Q3A"
 
-# Sample data
-data = [
-    ("Alice is brilliant and always delivers her work on time.", "Alice", 1),   # positive
-    ("Bob is lazy and never meets deadlines.", "Bob", 0),                      # negative
-    ("I think Charlie is okay, not the best but tries.", "Charlie", 0.5),     # neutral
-]
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-# Tokenizer and vectorizer (naive version using SpaCy vectors)
-def tokenize_and_vectorize(text):
-    doc = nlp(text)
-    vectors = [token.vector for token in doc if token.has_vector]
-    return torch.tensor(vectors).mean(dim=0)  # average word vectors
+# --- Função de pré-processamento ---
+def preprocess_text(text):
+    text = text.lower()
+    text = re.sub(r"http\S+", "", text)  # Remove links
+    text = re.sub(r"[^a-zA-ZÀ-ÿ\s]", "", text)  # Remove caracteres especiais
+    return text.strip()
 
-# Prepare training data
-X = torch.stack([tokenize_and_vectorize(x[0]) for x in data])
-y = torch.tensor([x[2] for x in data], dtype=torch.float32).unsqueeze(1)
+# --- Carregar modelo de sentimento ---
+classifier = pipeline("sentiment-analysis", model="nlptown/bert-base-multilingual-uncased-sentiment")
 
-# Simple sentiment model
-class SentimentModel(nn.Module):
-    def __init__(self, input_size):
-        super().__init__()
-        self.linear = nn.Linear(input_size, 1)
-        self.sigmoid = nn.Sigmoid()
+# --- Função para converter para nota 0-2 ---
+def sentiment_to_score(label):
+    if label in ["1 star", "2 stars"]:
+        return 0  # Negativo
+    elif label == "3 stars":
+        return 1  # Neutro
+    else:
+        return 2  # Positivo
 
-    def forward(self, x):
-        return self.sigmoid(self.linear(x))
+# --- Função para detectar entidade (quem se fala) ---
+def detect_entity(text):
+    empresas = ["empresa A", "empresa B", "produto X"]  # ajuste conforme seu contexto
+    for entidade in empresas:
+        if entidade.lower() in text.lower():
+            return entidade
+    return "Desconhecido"
 
-model = SentimentModel(input_size=X.shape[1])
-criterion = nn.MSELoss()
-optimizer = optim.Adam(model.parameters(), lr=0.01)
+# --- Carregar e processar JSON ---
+with open('whatsapp_feedback.json', 'r', encoding='utf-8') as f:
+    data = json.load(f)
 
-# Training loop
-for epoch in range(100):
-    outputs = model(X)
-    loss = criterion(outputs, y)
+processed_data = []
 
-    optimizer.zero_grad()
-    loss.backward()
-    optimizer.step()
+for item in data:
+    numero = item['numero']
+    datetime = item['datetime']
+    raw_text = item['text']
+    clean_text = preprocess_text(raw_text)
 
-    if epoch % 10 == 0:
-        print(f"Epoch {epoch}, Loss: {loss.item():.4f}")
+    # Classificação de sentimento
+    result = classifier(clean_text)[0]
+    nota = sentiment_to_score(result['label'])
 
-def evaluate_text(text):
-    doc = nlp(text)
-    people = [ent.text for ent in doc.ents if ent.label_ == "PERSON"]
-    vec = tokenize_and_vectorize(text)
-    score = model(vec.unsqueeze(0)).item()
+    # Entidade
+    entidade = detect_entity(clean_text)
 
-    return people, round(score, 2)
+    # Montar o dicionário para envio
+    processed_data.append({
+        "id_evaluator": numero,
+        "feedback": clean_text,
+        "score": nota,
+        "id_user": entidade
+    })
 
-# Test
-text = "I really appreciate how David handled the project."
-people, score = evaluate_text(text)
-
-print("Person(s):", people)
-print("Evaluation Score:", score)
+# --- Enviar para Supabase ---
+for item in processed_data:
+    response = supabase.table('feedbacks').insert(item).execute()
+    print(f"Enviado: {item} | Resposta: {response}")
