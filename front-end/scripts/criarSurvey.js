@@ -42,41 +42,41 @@ btnAdicionarPergunta.addEventListener("click", () => {
   tipoSelect.addEventListener("change", () => {
     if (tipoSelect.value === "fechada") {
       alternativasContainer.style.display = "block";
+      alternativasBox.innerHTML = "";
+      for (let i = 0; i < 2; i++) {
+        btnAdicionarAlt.click(); // adiciona duas alternativas iniciais
+      }
     } else {
       alternativasContainer.style.display = "none";
       alternativasBox.innerHTML = "";
     }
   });
 
-    btnAdicionarAlt.addEventListener("click", () => {
-  const container = document.createElement("div");
-  container.classList.add("linha-alternativa");
+  btnAdicionarAlt.addEventListener("click", () => {
+    const container = document.createElement("div");
+    container.classList.add("linha-alternativa");
 
-  const input = document.createElement("input");
-  input.setAttribute("type", "text");
-  input.setAttribute("placeholder", "Alternativa");
+    const input = document.createElement("input");
+    input.setAttribute("type", "text");
+    input.setAttribute("placeholder", "Alternativa");
 
-  const botao = document.createElement("button");
-  botao.innerHTML = "🗑️";
-  botao.type = "button";
-  botao.classList.add("btn-remover");
+    const botao = document.createElement("button");
+    botao.innerHTML = "🗑️";
+    botao.type = "button";
+    botao.classList.add("btn-remover");
 
-  botao.addEventListener("click", () => {
-    container.remove();
+    botao.addEventListener("click", () => {
+      container.remove();
+    });
+
+    container.appendChild(input);
+    container.appendChild(botao);
+    alternativasBox.appendChild(container);
   });
-
-  container.appendChild(input);
-  container.appendChild(botao);
-  alternativasBox.appendChild(container);
 });
 
-
-});
-
-// Gerar survey
 btnGerarSurvey.addEventListener("click", () => {
   const perguntas = [];
-
   const caixas = document.querySelectorAll(".pergunta-box");
 
   for (let caixa of caixas) {
@@ -108,7 +108,6 @@ btnGerarSurvey.addEventListener("click", () => {
   }
 
   localStorage.setItem("surveyCriada", JSON.stringify(perguntas));
-  surveyLink.textContent = "Clique aqui para compartilhar";
-  surveyLink.href = "responderSurvey.html";
+  surveyLink.textContent = "Clique aqui para responder";
   linkSurvey.style.display = "block";
 });
