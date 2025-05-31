@@ -1,0 +1,149 @@
+body {
+  background-color: #f4f4f4;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.perfil-container {
+  padding: 20px;
+  max-width: 400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.caminho {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.caminho a {
+  text-decoration: none;
+  color: #555;
+}
+
+.foto-perfil {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 30px;
+  flex-direction: column;
+  align-items: center;
+}
+
+.imagem {
+  width: 100px;
+  height: 100px;
+  background-color: #ccc;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  border: 2px solid #aaa;
+}
+
+.botao-editar-foto {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  background-color: white;
+  border: 1px solid #999;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 24px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.menu-opcoes {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, 10px);
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  z-index: 10;
+  min-width: 140px;
+}
+
+.menu-opcoes button {
+  background: none;
+  border: none;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.menu-opcoes button:hover {
+  background-color: #f1f1f1;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.formulario input {
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  font-size: 14px;
+}
+
+#DDD {
+    width: 25vw;
+}
+
+#telefone {
+    width: 50vw;
+}
+
+.telefone {
+    display: flex;
+    gap: 5px;
+}
+.telefone > input {
+    border-radius: 10px;
+    border-style: none;
+    width: auto;
+    border: 1px solid #ddd;
+    background-color: #fff;
+}
+
+.icone-editar {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+#confirmar {
+    margin-top: 10vh;
+    padding: 15px;
+    width: 70vw;
+    border-style: none;
+    background-color: #30A280;
+    color: #fff;
+    font-size: 6vw;
+    border-radius: 10px;
+    cursor: pointer;
+}

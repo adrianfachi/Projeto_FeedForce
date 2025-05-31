@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meu Perfil</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/meuPerfil.css" />
+</head>
+<body>
+  <main>
+    <div class="perfil-container">
+      <p class="caminho">
+        <a href="minhaConta.html">Minha Conta</a> > <strong>Meu Perfil</strong>
+      </p>
+
+      <div class="foto-perfil">
+        <div class="imagem" id="imagemPerfil"></div>
+        <div class="botao-editar-foto" id="menuToggle">+</div>
+
+        <div class="menu-opcoes" id="menuOpcoes">
+          <button id="verImagem">Ver imagem</button>
+          <button id="editarImagem">Editar imagem</button>
+          <button id="removerImagem">Remover imagem</button>
+        </div>
+
+        <input type="file" id="inputImagem" accept="image/*" style="display: none;" />
+      </div>
+
+      <form class="formulario">
+
+        <div class="telefone">
+              <input type="text" name="DDD" id="DDD" placeholder="DDD" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="2">
+              <input type="text" name="telefone" id="telefone" placeholder="Telefone" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="9">
+          </div>
+        <input type="text" placeholder="Endereço" />
+      </form>
+      <input type="button" value="Confirmar mudanças" id="confirmar">
+    </div>
+  </main>
+
+  <footer>
+    <div>
+      <a href="meusFeedbacks.html">
+        <img class="emotes" src="imagens/meusFeedbacks.png" alt="meus feedbacks" />
+      </a>
+    </div>
+    <div>
+      <a href="telaInicial.html">
+        <img class="emotes" id="addFeedback" src="imagens/addFeedback.png" alt="adicionar feedback" />
+      </a>
+    </div>
+    <div>
+      <a href="minhaConta.html">
+        <img class="emotes" src="imagens/meuPerfil.png" alt="meu perfil" />
+      </a>
+    </div>
+  </footer>
+
+  <script src="scripts/meuPerfil.js"></script>
+</body>
+</html>
