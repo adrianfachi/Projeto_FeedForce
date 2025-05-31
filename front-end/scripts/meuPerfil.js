@@ -4,19 +4,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const imagemPerfil = document.getElementById("imagemPerfil");
   const inputImagem = document.getElementById("inputImagem");
 
-  // Abrir/fechar menu
   menuToggle.addEventListener("click", () => {
     menuOpcoes.style.display = menuOpcoes.style.display === "flex" ? "none" : "flex";
   });
 
-  // Fechar menu ao clicar fora
   document.addEventListener("click", (e) => {
     if (!menuToggle.contains(e.target) && !menuOpcoes.contains(e.target)) {
       menuOpcoes.style.display = "none";
     }
   });
 
-  // Ver imagem
   document.getElementById("verImagem").addEventListener("click", () => {
     const bg = imagemPerfil.style.backgroundImage;
     if (bg && bg !== "none") {
@@ -27,7 +24,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Editar imagem (upload)
   document.getElementById("editarImagem").addEventListener("click", () => {
     inputImagem.click();
   });
@@ -43,7 +39,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Remover imagem
   document.getElementById("removerImagem").addEventListener("click", () => {
     imagemPerfil.style.backgroundImage = "none";
     inputImagem.value = null;

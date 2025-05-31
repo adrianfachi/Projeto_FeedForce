@@ -34,11 +34,25 @@ body {
   align-self: flex-start;
 }
 
+.anonimo-area {
+  padding: 10px 20px;
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+}
+
+#btnAnonimo {
+  padding: 8px 16px;
+  border: 1px solid #888;
+  border-radius: 8px;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  font-weight: bold;
+}
+
 .input-area {
   padding: 10px;
   border-top: 1px solid #ccc;
   background-color: #fff;
-  position: relative;
 }
 
 #inputMensagem {
@@ -47,32 +61,6 @@ body {
   border-radius: 10px;
   border: 1px solid #ccc;
   font-size: 16px;
-}
-
-/* Sugestões (autocomplete) */
-.sugestoes-lista {
-  list-style: none;
-  padding: 0;
-  margin: 5px 0 0;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: white;
-  max-height: 150px;
-  overflow-y: auto;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  position: absolute;
-  width: 100%;
-  z-index: 1000;
-}
-
-.sugestoes-lista li {
-  padding: 10px;
-  cursor: pointer;
-  border-bottom: 1px solid #eee;
-}
-
-.sugestoes-lista li:hover {
-  background-color: #f2f2f2;
 }
 
 .botoes {
@@ -87,6 +75,29 @@ body {
   border: 1px solid #4CAF50;
   background-color: white;
   cursor: pointer;
+}
+
+.sugestoes {
+  position: absolute;
+  top: auto;
+  left: 20px;
+  right: 20px;
+  background: white;
+  border: 1px solid #ccc;
+  z-index: 10;
+  max-height: 140px;
+  overflow-y: auto;
+  border-radius: 8px;
+}
+
+.sugestao-item {
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+}
+
+.sugestao-item:hover {
+  background-color: #f0f0f0;
 }
 
 @keyframes fadeIn {
