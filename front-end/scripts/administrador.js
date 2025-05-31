@@ -100,15 +100,51 @@ function validaTelefone (telefone) {
     }
 }
 
-function adicionar() {
-    if(validaNome(nome) && validacaoEmail(email) && validacaoSenha(senha) && validaFuncao(funcao) && validaDDD(ddd) && validaTelefone(telefone)) {
+
+async function adicionar() {
+    if (validaNome(nome) && validacaoEmail(email) && validacaoSenha(senha) &&
+        validaFuncao(funcao) && validaDDD(ddd) && validaTelefone(telefone)) {
         
+        const novoUsuario = {
+            user_name: nome.value,
+            user_email: email.value,
+            user_password: senha.value,  // ⚠️ Ideal seria hashear isso
+            user_role: funcao.value,
+            user_cellphone: `(${ddd.value}) ${telefone.value}`
+        };
+
+        const supabaseUrl = "https://dpmyuojkrmgnwfyieqig.supabase.co"
+        const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRwbXl1b2prcm1nbndmeWllcWlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg2NjQ0NzgsImV4cCI6MjA2NDI0MDQ3OH0.NnNTpy36xLrBzHlLPmm8ACOzNXfZ3pAOtM8hdOa5Q3A"
+
+        fetch(`${supabaseUrl}/rest/v1/users`, {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json",
+            "apikey": supabaseAnonKey,
+            "Authorization": `Bearer ${supabaseAnonKey}`,
+            "Prefer": "return=representation"
+        },
+        body: JSON.stringify({
+        user_name: nome.value,
+        user_email: email.value,
+        user_password: senha.value,
+        user_role: funcao.value,
+        user_cellphone: `(${ddd.value}) ${telefone.value}`
+    })
+    })
+    .then(response => response.json())
+    .then(data => console.log("Resposta Supabase:", data))
+    .catch(err => console.error("Erro:", err));
+
+    const data = await response.json();
+
+     if (!response.ok) {
+            alert("Erro ao cadastrar: " + (data.message || response.statusText));
     } else {
-        validaNome(nome)
-        validacaoEmail(email) 
-        validaCPF(senha) 
-        validaFuncao(funcao)
-        validaDDD(ddd)
-        validaTelefone(telefone)
+            alert("Usuário cadastrado com sucesso!");
+        }
+
+    } else {
+        alert("Por favor, corrija os campos destacados.");
     }
 }
