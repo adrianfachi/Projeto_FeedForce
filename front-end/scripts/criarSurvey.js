@@ -108,17 +108,14 @@ btnGerarSurvey.addEventListener("click", () => {
     perguntas.push(pergunta);
   }
 
-  // Salvar no localStorage
   localStorage.setItem("surveyCriada", JSON.stringify(perguntas));
 
-  // Gerar link simulado
   const link = "https://meusurveys.com/s/mRYWn1Fl";
   surveyLink.textContent = link;
   surveyLink.href = link;
   linkSurvey.style.display = "block";
 });
 
-// Botão de copiar link
 btnCopiar.addEventListener("click", () => {
   const texto = surveyLink.textContent;
   navigator.clipboard.writeText(texto).then(() => {

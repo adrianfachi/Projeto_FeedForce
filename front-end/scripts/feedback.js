@@ -7,7 +7,6 @@ let nome = '';
 let mensagem = '';
 let anonimo = false;
 
-// Lista de nomes simulada
 const nomesUsuarios = [
   "Ana Souza", "Ana Lima", "Ana Mendes", "Ana Rocha",
   "Andy Silva", "Fernanda Costa", "Gabriel Monteiro",
@@ -22,10 +21,8 @@ function adicionarMensagem(texto, classe = "bot") {
   chat.scrollTop = chat.scrollHeight;
 }
 
-// Primeira mensagem do bot
 adicionarMensagem("Para quem você quer enviar?");
 
-// Autocompletar ao digitar
 input.addEventListener("input", () => {
   const valor = input.value.toLowerCase().trim();
   listaSugestoes.innerHTML = "";
@@ -54,7 +51,6 @@ document.addEventListener("click", (e) => {
   }
 });
 
-// Controle do chat
 input.addEventListener("keydown", function (e) {
   if (e.key === "Enter" && input.value.trim() !== "") {
     const textoUsuario = input.value.trim();
